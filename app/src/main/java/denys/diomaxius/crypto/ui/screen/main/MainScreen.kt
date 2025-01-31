@@ -16,14 +16,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import denys.diomaxius.crypto.data.model.CryptoCurrency
+
 
 @Composable
 fun MainScreen(
-    mainViewModel: MainViewModel = viewModel()
+    viewModel: MainViewModel = hiltViewModel()
 ) {
-    val cryptoList by mainViewModel.cryptoList.collectAsState()
+    val cryptoList by viewModel.cryptoList.collectAsState()
 
     LazyColumn(
         modifier = Modifier
@@ -35,7 +36,6 @@ fun MainScreen(
         }
     }
 }
-
 
 @Composable
 fun CryptoItem(crypto: CryptoCurrency) {

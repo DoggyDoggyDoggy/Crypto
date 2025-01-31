@@ -2,14 +2,18 @@ package denys.diomaxius.crypto.ui.screen.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import denys.diomaxius.crypto.api.RetrofitInstance
+import dagger.hilt.android.lifecycle.HiltViewModel
 import denys.diomaxius.crypto.data.model.CryptoCurrency
+import denys.diomaxius.crypto.repository.CryptoRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel:ViewModel() {
-    private val api = RetrofitInstance.api
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val repository: CryptoRepository
+) : ViewModel() {
 
     private val _cryptoList = MutableStateFlow<List<CryptoCurrency>>(emptyList())
     val cryptoList = _cryptoList.asStateFlow()
@@ -21,7 +25,7 @@ class MainViewModel:ViewModel() {
     fun fetchCrypto() {
         viewModelScope.launch {
             try {
-                _cryptoList.value = api.getCrypto()
+                _cryptoList.value = repository.getCrypto()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
